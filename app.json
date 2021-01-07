@@ -13,20 +13,34 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     },
+
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
-      }
+      "permissions": [
+        "CAMERA_ROLL",
+        "MEDIA_LIBRARY",
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "NOTIFICACION",
+        "USER_FACING_NOTIFICATIONS"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "firebase": {
+        "apiKey": "AIzaSyB2ouaginnYam0JEeN1ks_FxQUsbfOf4HM",
+        "authDomain": "whatscommerce-b8490.firebaseapp.com",
+        "projectId": "whatscommerce-b8490",
+        "storageBucket": "whatscommerce-b8490.appspot.com",
+        "messagingSenderId": "621708385529",
+        "appId": "1:621708385529:web:3ac355753ed130649fd628"
+      }
     }
   }
 }
