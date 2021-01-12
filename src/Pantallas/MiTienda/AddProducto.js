@@ -4,7 +4,7 @@ import {
   Text,
   StyleSheet,
   Alert,
-  TouchableOpacit,
+  TouchableOpacity,
   ScrollView,
 } from "react-native";
 import {
@@ -20,7 +20,10 @@ import { useNavigation } from "@react-navigation/native";
 import Loading from "../../Componentes/Loading";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { cargarImagenesxAspecto } from "../../Utils/Utils";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import {
+  subirImagenesBatch,
+  addRegistroEspecifico,
+} from "../../Utils/Acciones";
 
 export default function AddProducto() {
   const [titulo, settitulo] = useState("");
@@ -30,8 +33,49 @@ export default function AddProducto() {
   const [categoria, setcategoria] = useState("");
   const [rating, setrating] = useState(5);
   const [errores, seterrores] = useState("");
+  const [loading, setloading] = useState(false);
   const btnref = useRef();
   const navigation = useNavigation();
+
+  const addProducto = async () => {
+    seterrores({});
+    if (isEmpty(titulo)) {
+      seterrores({ titulo: "El campo título es obligatorio" });
+    } else if (isEmpty(descripcion)) {
+      seterrores({ descripcion: "El campo descripcion es obligatorio" });
+    } else if (!parseFloat(precio) > 0) {
+      seterrores({ precio: "Introduzca un precio para el producto" });
+    } else if (isEmpty(categoria)) {
+      Alert.alert(
+        "Seleccione Categoría",
+        "Favor seleccione una categoría para el producto o servicio",
+        [
+          {
+            style: "cancel",
+            text: "Entendido",
+          },
+        ]
+      );
+    } else if (isEmpty(imagenes)) {
+      Alert.alert(
+        "Seleccione Imagenes",
+        "Favor seleccione una imagen para su producto o servicio",
+        [
+          {
+            style: "cancel",
+            text: "Entendido",
+          },
+        ]
+      );
+    } else {
+      const urlimagenes = await subirImagenesBatch(
+        imagenes,
+        "ImagenesProductos"
+      );
+
+      console.log(urlimagenes);
+    }
+  };
 
   return (
     <KeyboardAwareScrollView style={styles.container}>
@@ -45,25 +89,26 @@ export default function AddProducto() {
         }}
       />
       <Input
-        placeholder="Titulo"
-        onChengeText={(text) => settitulo(text)}
+        placeholder="Título"
+        onChangeText={(text) => settitulo(text)}
         inputStyle={styles.input}
         errorMessage={errores.titulo}
       />
       <Input
-        placeholder="Descripción"
-        onChengeText={(text) => setdescripcion(text)}
+        placeholder="Descripcion"
+        onChangeText={(text) => setdescripcion(text)}
         inputStyle={styles.textarea}
         errorMessage={errores.descripcion}
         multiline={true}
       />
       <Input
         placeholder="Precio"
-        onChengeText={(text) => setprecio(parseFloat(text))}
+        onChangeText={(text) => setprecio(parseFloat(text))}
         inputStyle={styles.input}
         errorMessage={errores.precio}
         keyboardType="name-phone-pad"
       />
+
       <Text style={styles.txtlabel}>Calidad del Producto o Servicio</Text>
       <AirbnbRating
         count={5}
@@ -82,7 +127,9 @@ export default function AddProducto() {
         title="Agregar Nuevo Producto"
         buttonStyle={styles.btnaddnew}
         ref={btnref}
+        onPress={addProducto}
       />
+      <Loading isVisible={loading} text="Por favor espere..." />
     </KeyboardAwareScrollView>
   );
 }
