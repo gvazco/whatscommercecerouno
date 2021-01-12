@@ -20,6 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 import Loading from "../../Componentes/Loading";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { cargarImagenesxAspecto } from "../../Utils/Utils";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 export default function AddProducto() {
   const [titulo, settitulo] = useState("");
@@ -76,6 +77,7 @@ export default function AddProducto() {
       <Text style={styles.txtlabel}>Cargar Imágenes</Text>
       <SubirImagenes imagenes={imagenes} setimagenes={setimagenes} />
       <Text style={styles.txtlabel}>Asignar Categoría</Text>
+      <Botonera categoria={categoria} setcategoria={setcategoria} />
       <Button
         title="Agregar Nuevo Producto"
         buttonStyle={styles.btnaddnew}
@@ -141,6 +143,75 @@ function SubirImagenes(props) {
   );
 }
 
+function Botonera(props) {
+  const { categoria, setcategoria } = props;
+  return (
+    <View style={styles.botonera}>
+      <TouchableOpacity
+        style={styles.btncategoria}
+        onPress={() => {
+          setcategoria("libros");
+        }}
+      >
+        <Icon
+          type="material-community"
+          name="book-open"
+          size={24}
+          color={categoria === "libros" ? "#128c7e" : "#757575"}
+          reverse
+        />
+        <Text>Libros</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.btncategoria}
+        onPress={() => {
+          setcategoria("ideas");
+        }}
+      >
+        <Icon
+          type="material-community"
+          name="lightbulb-on-outline"
+          size={24}
+          color={categoria === "ideas" ? "#128c7e" : "#757575"}
+          reverse
+        />
+        <Text>Ideas</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.btncategoria}
+        onPress={() => {
+          setcategoria("articulos");
+        }}
+      >
+        <Icon
+          type="material-community"
+          name="cart-arrow-down"
+          size={24}
+          color={categoria === "articulos" ? "#128c7e" : "#757575"}
+          reverse
+        />
+        <Text>Artículos</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.btncategoria}
+        onPress={() => {
+          setcategoria("servicios");
+        }}
+      >
+        <Icon
+          type="material-community"
+          name="book-open"
+          size={24}
+          color={categoria === "servicios" ? "#128c7e" : "#757575"}
+          reverse
+        />
+
+        <Text>Servicios</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -188,4 +259,10 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   miniatura: { width: 100, height: 150, marginRight: 10 },
+  botonera: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+  },
+  btncategoria: { justifyContent: "center", alignItems: "center" },
 });
