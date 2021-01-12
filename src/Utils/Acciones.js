@@ -190,3 +190,18 @@ export const actualizaremailfirebase = async (email) => {
     .catch((err) => (response.statusresponse = false));
   return response;
 };
+
+export const addRegistro = async (coleccion, data) => {
+  const resultado = { error: "", statusresponse: false };
+  await db
+    .collection(coleccion)
+    .add(data)
+    .then((response) => {
+      resultado.statusresponse = true;
+    })
+    .catch((err) => {
+      resultado.error = err;
+    });
+
+  return resultado;
+};

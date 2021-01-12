@@ -23,6 +23,8 @@ import { cargarImagenesxAspecto } from "../../Utils/Utils";
 import {
   subirImagenesBatch,
   addRegistroEspecifico,
+  addRegistro,
+  ObtenerUsuario,
 } from "../../Utils/Acciones";
 
 export default function AddProducto() {
@@ -68,12 +70,53 @@ export default function AddProducto() {
         ]
       );
     } else {
+      setloading(true);
       const urlimagenes = await subirImagenesBatch(
         imagenes,
         "ImagenesProductos"
       );
 
-      console.log(urlimagenes);
+      const producto = {
+        titulo,
+        descripcion,
+        precio,
+        usuario: ObtenerUsuario().uid,
+        imagenes: urlimagenes,
+        status: 1,
+        fechadecreacion: new Date(),
+        rating,
+        categoria,
+      };
+
+      const registrarproducto = await addRegistro("Productos", producto);
+
+      if (registrarproducto.statusresponse) {
+        setloading(false);
+        Alert.alert(
+          "Registro Exitoso",
+          "El producto se ha registrado correctamente",
+          [
+            {
+              style: "cancel",
+              text: "Aceptar",
+              onPress: () => navigation.navigate("mitienda"),
+            },
+          ]
+        );
+      } else {
+        setloading(false);
+        Alert.alert(
+          "Registro Fallido",
+          "Ha ocurrido un error al registrar producto",
+          [
+            {
+              style: "cancel",
+              text: "Aceptar",
+              onPress: () => navigation.navigate("mitienda"),
+            },
+          ]
+        );
+      }
     }
   };
 
