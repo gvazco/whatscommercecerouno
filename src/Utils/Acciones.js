@@ -109,13 +109,14 @@ export const ObtenerUsuario = () => {
 };
 
 export const addRegistroEspecifico = async (coleccion, doc, data) => {
-  const resultado = { error: "", statusresponse: false };
+  const resultado = { error: "", statusreponse: false };
+
   await db
     .collection(coleccion)
     .doc(doc)
     .set(data, { merge: true })
     .then((response) => {
-      resultado.statusresponse = true;
+      resultado.statusreponse = true;
     })
     .catch((err) => {
       resultado.error = err;
@@ -180,10 +181,9 @@ export const reautenticar = async (verificationId, code) => {
 
 export const actualizaremailfirebase = async (email) => {
   let response = { statusresponse: false };
-
   await firebase
     .auth()
-    .currentUser.updateEmail()
+    .currentUser.updateEmail(email)
     .then((respuesta) => {
       response.statusresponse = true;
     })
@@ -191,17 +191,40 @@ export const actualizaremailfirebase = async (email) => {
   return response;
 };
 
-export const addRegistro = async (coleccion, data) => {
-  const resultado = { error: "", statusresponse: false };
+export const addRegistro = async (colecion, data) => {
+  const resultado = { error: "", statusreponse: false };
+
   await db
-    .collection(coleccion)
+    .collection(colecion)
     .add(data)
     .then((response) => {
-      resultado.statusresponse = true;
+      resultado.statusreponse = true;
     })
     .catch((err) => {
       resultado.error = err;
     });
 
   return resultado;
+};
+
+export const ListarMisProductos = async () => {
+  let productos = [];
+
+  await db
+    .collection("Productos")
+    .where("usuario", "==", ObtenerUsuario().uid)
+    .where("status", "==", 1)
+    .get()
+    .then((response) => {
+      response.forEach((doc) => {
+        const producto = doc.data();
+        producto.id = doc.id;
+        productos.push(producto);
+      });
+    })
+    .catch((err) => {
+      console.log("error");
+    });
+
+  return productos;
 };
