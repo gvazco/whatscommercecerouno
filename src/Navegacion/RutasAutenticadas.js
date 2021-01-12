@@ -10,6 +10,8 @@ import TiendaStack from "./TiendaStack";
 import PerfilStack from "./PerfilStack";
 import MiTienda from "./MiTiendaStack";
 
+import { ObtenerUsuario } from "../Utils/Acciones";
+
 //aquí importaremos algunos componentes más adelante
 
 const Tab = createBottomTabNavigator();
@@ -39,6 +41,7 @@ const TabBar = () => {
         name="tienda"
         options={{ title: "Tienda" }}
       />
+
       <Tab.Screen
         component={MiTienda}
         name="mitienda"
