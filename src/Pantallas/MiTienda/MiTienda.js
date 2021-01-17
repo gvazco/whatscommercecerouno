@@ -133,7 +133,7 @@ function Producto(props) {
               color="#FFA000"
               style={styles.iconedit}
               onPress={() => {
-                navigation.navigate("edit-product", { id });
+                navigation.navigate("editar-producto", { id });
               }}
             />
           </View>

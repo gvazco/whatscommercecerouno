@@ -13,7 +13,7 @@ if (!global.atob) {
   global.atob = decode;
 }
 
-LogBox.ignoreLogs(["Animated", "Setting a timer"]);
+LogBox.ignoreLogs(["Animated", "Setting a timer", "firebase"]);
 
 export default function App() {
   const [user, setuser] = useState(false);

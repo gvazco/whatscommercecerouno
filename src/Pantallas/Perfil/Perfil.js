@@ -6,7 +6,7 @@ import {
   subirImagenesBatch,
   ObtenerUsuario,
   addRegistroEspecifico,
-  actualizarPerfil,
+  actualilzarPerfil,
   enviarconfirmacionphone,
   reautenticar,
   actualizaremailfirebase,
@@ -73,7 +73,7 @@ export default function Perfil() {
   const actualizarValor = async (input, valor) => {
     switch (input) {
       case "displayName":
-        console.log(await actualizarPerfil({ displayName: valor }));
+        console.log(await actualilzarPerfil({ displayName: valor }));
         addRegistroEspecifico("Usuarios", usuario.uid, { displayName: valor });
         console.log(usuario);
 
@@ -83,7 +83,7 @@ export default function Perfil() {
           if (validaremail(valor)) {
             const verification = await enviarconfirmacionphone(
               phoneNumber,
-              recaptcha
+              recapcha
             );
             if (verification) {
               setverificationid(verification);
@@ -119,7 +119,7 @@ export default function Perfil() {
       setloading(false);
       setisVisible(false);
     } else {
-      alert("Ha ocurrido un error al actualizar el correo electrónico");
+      alert("Ha ocurrido un error al actualizar el correo");
       setloading(false);
       setisVisible(false);
     }
@@ -187,7 +187,7 @@ function HeaderAvatar(props) {
         photoURL: url[0],
       });
 
-      if (response.statusreponse) {
+      if (response.statusresponse) {
         setimagenperfil(url[0]);
         setloading(false);
       } else {
@@ -196,7 +196,6 @@ function HeaderAvatar(props) {
       }
     }
   };
-
   return (
     <View style={styles.avatarinline}>
       <Avatar
@@ -253,7 +252,7 @@ function FormDatos(props) {
         id="phoneNumber"
         label="Teléfono"
         obtenerValor={obtenerValor}
-        placeholder="+00000000"
+        placeholder="+000000000000"
         onChangeInput={onChangeInput}
         editable={editablephone}
         seteditable={seteditablephone}

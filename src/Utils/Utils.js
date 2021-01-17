@@ -1,8 +1,10 @@
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
+import { Alert, Linking } from "react-native";
+import { size } from "lodash";
 
 export const validaremail = (text) => {
-  let reg = /^\w+([\.-]?w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+  let reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   if (reg.test(text) === false) {
     return false;
   } else {
@@ -16,7 +18,7 @@ export const cargarImagenesxAspecto = async (array) => {
   const cameraPermissions = resultPermissions.permissions.cameraRoll.status;
 
   if (cameraPermissions === "denied") {
-    alert("Usted debe permitir el acceso para cargar las imagenes");
+    alert("Usted debe permitir el accesos para cargar las imagenes");
   } else {
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,

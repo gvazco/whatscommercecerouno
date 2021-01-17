@@ -109,14 +109,14 @@ export const ObtenerUsuario = () => {
 };
 
 export const addRegistroEspecifico = async (coleccion, doc, data) => {
-  const resultado = { error: "", statusreponse: false };
+  const resultado = { error: "", statusresponse: false };
 
   await db
     .collection(coleccion)
     .doc(doc)
     .set(data, { merge: true })
     .then((response) => {
-      resultado.statusreponse = true;
+      resultado.statusresponse = true;
     })
     .catch((err) => {
       resultado.error = err;
@@ -192,13 +192,13 @@ export const actualizaremailfirebase = async (email) => {
 };
 
 export const addRegistro = async (colecion, data) => {
-  const resultado = { error: "", statusreponse: false };
+  const resultado = { error: "", statusresponse: false };
 
   await db
     .collection(colecion)
     .add(data)
     .then((response) => {
-      resultado.statusreponse = true;
+      resultado.statusresponse = true;
     })
     .catch((err) => {
       resultado.error = err;
@@ -227,4 +227,53 @@ export const ListarMisProductos = async () => {
     });
 
   return productos;
+};
+
+export const actualizarRegistro = async (coleccion, documento, data) => {
+  let response = { statusresponse: false };
+
+  await db
+    .collection(coleccion)
+    .doc(documento)
+    .update(data)
+    .then((result) => (response.statusresponse = true))
+    .catch((err) => console.log(err));
+
+  return response;
+};
+
+export const eliminarProducto = async (coleccion, documento) => {
+  let response = { statusresponse: false };
+
+  await db
+    .collection(coleccion)
+    .doc(documento)
+    .delete()
+    .then((result) => (response.statusresponse = true))
+    .catch((err) => {
+      console.log(err);
+    });
+
+  return response;
+};
+
+export const obtenerRegistroxID = async (coleccion, documento) => {
+  let response = { statusresponse: false, data: null };
+
+  await db
+    .collection(coleccion)
+    .doc(documento)
+    .get()
+    .then((result) => {
+      const producto = result.data();
+      producto.id = result.id;
+
+      response.data = producto;
+      response.statusresponse = true;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  return response;
 };
