@@ -20,7 +20,7 @@ export default function ShopButton() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#25d366",
+    backgroundColor: "#25D366",
     alignItems: "center",
     justifyContent: "center",
     width: 72,

@@ -1,6 +1,6 @@
 import { firebaseapp } from "./Firebase";
 import { Platform } from "react-native";
-import firebase from "firebase";
+import * as firebase from "firebase";
 import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
@@ -8,8 +8,10 @@ import "firebase/firestore";
 import uuid from "random-uuid-v4";
 import { map } from "lodash";
 import { convertirFicheroBlob } from "./Utils";
+import { FireSQL } from "firesql";
 
 const db = firebase.firestore(firebaseapp);
+const fireSQL = new FireSQL(firebase.firestore(), { includeId: "id" });
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -41,12 +43,12 @@ export const validarPhone = (setphoneauth) => {
     });
 };
 
-export const enviarconfirmacionphone = async (numero, recapcha) => {
+export const enviarconfirmacionphone = async (numero, recaptcha) => {
   let verificationid = "";
 
   await firebase
     .auth()
-    .currentUser.reauthenticateWithPhoneNumber(numero, recapcha.current)
+    .currentUser.reauthenticateWithPhoneNumber(numero, recaptcha.current)
     .then((response) => {
       verificationid = response.verificationId;
     })
@@ -109,14 +111,14 @@ export const ObtenerUsuario = () => {
 };
 
 export const addRegistroEspecifico = async (coleccion, doc, data) => {
-  const resultado = { error: "", statusresponse: false };
+  const resultado = { error: "", statusreponse: false };
 
   await db
     .collection(coleccion)
     .doc(doc)
     .set(data, { merge: true })
     .then((response) => {
-      resultado.statusresponse = true;
+      resultado.statusreponse = true;
     })
     .catch((err) => {
       resultado.error = err;
@@ -192,13 +194,13 @@ export const actualizaremailfirebase = async (email) => {
 };
 
 export const addRegistro = async (colecion, data) => {
-  const resultado = { error: "", statusresponse: false };
+  const resultado = { error: "", statusreponse: false };
 
   await db
     .collection(colecion)
     .add(data)
     .then((response) => {
-      resultado.statusresponse = true;
+      resultado.statusreponse = true;
     })
     .catch((err) => {
       resultado.error = err;
@@ -236,7 +238,7 @@ export const actualizarRegistro = async (coleccion, documento, data) => {
     .collection(coleccion)
     .doc(documento)
     .update(data)
-    .then((result) => (response.statusresponse = true))
+    .then((result) => (response.statusreponse = true))
     .catch((err) => console.log(err));
 
   return response;
@@ -257,7 +259,7 @@ export const eliminarProducto = async (coleccion, documento) => {
   return response;
 };
 
-export const obtenerRegistroxID = async (coleccion, documento) => {
+export const obternerRegistroxID = async (coleccion, documento) => {
   let response = { statusresponse: false, data: null };
 
   await db
@@ -296,7 +298,7 @@ export const ListarProductos = async () => {
     .catch((err) => console.log(err));
 
   for (const registro of productoslist) {
-    const usuario = await obtenerRegistroxID("Usuarios", registro.usuario);
+    const usuario = await obternerRegistroxID("Usuarios", registro.usuario);
     productoslist[index].usuario = usuario.data;
     index++;
   }
@@ -323,10 +325,103 @@ export const listarProductosxCategoria = async (categoria) => {
     .catch((err) => console.log(err));
 
   for (const registro of productoslist) {
-    const usuario = await obtenerRegistroxID("Usuarios", registro.usuario);
+    const usuario = await obternerRegistroxID("Usuarios", registro.usuario);
     productoslist[index].usuario = usuario.data;
     index++;
   }
 
   return productoslist;
+};
+
+export const Buscar = async (search) => {
+  let productos = [];
+
+  await fireSQL
+    .query(`SELECT * FROM Productos WHERE titulo LIKE '${search}%' `)
+    .then((response) => {
+      productos = response;
+    });
+
+  return productos;
+};
+
+export const iniciarnotificaciones = (
+  notificationListener,
+  responseListener
+) => {
+  notificationListener.current = Notifications.addNotificationReceivedListener(
+    (notification) => {
+      console.log(notification);
+    }
+  );
+
+  responseListener.current = Notifications.addNotificationResponseReceivedListener(
+    (response) => {
+      console.log(response);
+    }
+  );
+
+  return () => {
+    Notifications.removeNotificationSubscription(notificationListener);
+    Notifications.removeNotificationSubscription(responseListener);
+  };
+};
+
+export const sendPushNotification = async (mensaje) => {
+  let respuesta = false;
+  await fetch("https://exp.host/--/api/v2/push/send", {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Accept-encoding": "gzip, deflate",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(mensaje),
+  }).then((response) => {
+    respuesta = true;
+  });
+
+  return respuesta;
+};
+
+export const setMensajeNotificacion = (token, titulo, body, data) => {
+  const message = {
+    to: token,
+    sound: "default",
+    title: titulo,
+    body: body,
+    data: data,
+  };
+
+  return message;
+};
+
+export const ListarNotificaciones = async () => {
+  let respuesta = { statusresponse: false, data: [] };
+
+  let index = 0;
+
+  await db
+    .collection("Notificaciones")
+    .where("receiver", "==", ObtenerUsuario().uid)
+    .where("visto", "==", 0)
+    .get()
+    .then((response) => {
+      let datos;
+
+      response.forEach((doc) => {
+        datos = doc.data();
+        datos.id = doc.id;
+        respuesta.data.push(datos);
+      });
+      respuesta.statusresponse = true;
+    });
+
+  for (const notificacion of respuesta.data) {
+    const usuario = await obternerRegistroxID("Usuarios", notificacion.sender);
+    respuesta.data[index].sender = usuario.data;
+    index++;
+  }
+
+  return respuesta;
 };

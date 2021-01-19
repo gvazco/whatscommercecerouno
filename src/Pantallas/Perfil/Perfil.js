@@ -83,7 +83,7 @@ export default function Perfil() {
           if (validaremail(valor)) {
             const verification = await enviarconfirmacionphone(
               phoneNumber,
-              recapcha
+              recaptcha
             );
             if (verification) {
               setverificationid(verification);
@@ -187,7 +187,7 @@ function HeaderAvatar(props) {
         photoURL: url[0],
       });
 
-      if (response.statusresponse) {
+      if (response.statusreponse) {
         setimagenperfil(url[0]);
         setloading(false);
       } else {
@@ -252,7 +252,7 @@ function FormDatos(props) {
         id="phoneNumber"
         label="Teléfono"
         obtenerValor={obtenerValor}
-        placeholder="+000000000000"
+        placeholder="+00000000"
         onChangeInput={onChangeInput}
         editable={editablephone}
         seteditable={seteditablephone}

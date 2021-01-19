@@ -5,11 +5,14 @@ import CountryPicker from "react-native-country-picker-modal";
 import { useNavigation } from "@react-navigation/native";
 import { isEmpty } from "lodash";
 import FirebaseRecaptcha from "../../Utils/FirebaseRecaptcha";
-import { enviarconfirmacionphone } from "../../Utils/Acciones";
+import {
+  enviarconfirmacionphone,
+  registerForPushNotificationsAsync,
+} from "../../Utils/Acciones";
 
-export default function EnviarConfiarmacion() {
-  const [country, setcountry] = useState("MX");
-  const [callingCode, setcallingcode] = useState("52");
+export default function EnviarConfirmacion() {
+  const [country, setcountry] = useState("PA");
+  const [callingCode, setcallingcode] = useState("507");
   const [phone, setphone] = useState("");
   const recaptchaVerifier = useRef();
   const inputphone = useRef();
@@ -49,22 +52,24 @@ export default function EnviarConfiarmacion() {
     <View style={styles.container}>
       <Image
         source={require("../../../assets/logo.png")}
-        style={styles.imgLogo}
+        style={styles.imglogo}
       />
       <View style={styles.panel}>
         <View
-          style={{ borderBottomColor: "#25d3e6", borderWidth: 2, width: 100 }}
+          style={{
+            borderBottomColor: "#25d366",
+            borderBottomWidth: 2,
+            width: 100,
+          }}
         />
         <View style={styles.panelinterno}>
           <Icon
             name="whatsapp"
             type="material-community"
             size={100}
-            color="#25d366"
+            color="#25D366"
           />
-          <Text style={styles.titulo}>
-            Por favor ingresa tu número de WhatsApp
-          </Text>
+          <Text style={styles.titulo}>Favor ingresa tu número de Whatsapp</Text>
           <View style={styles.viewtelefono}>
             <CountryPicker
               withFlag
@@ -77,9 +82,9 @@ export default function EnviarConfiarmacion() {
                 setcallingcode(...Country.callingCode);
               }}
             />
-            <Text style={{ color: "#fff" }}></Text>
+            <Text style={{ color: "#fff" }}> | </Text>
             <TextInput
-              placeholder="Número de WhatsApp"
+              placeholder="Número de Whatsapp"
               style={styles.input}
               placeholderTextColor="#fff"
               onChangeText={(text) => setphone(text)}
@@ -102,8 +107,16 @@ export default function EnviarConfiarmacion() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#128c7e" },
-  imgLogo: { width: 106, height: 106, alignSelf: "center", marginVertical: 40 },
+  container: {
+    flex: 1,
+    backgroundColor: "#128C7E",
+  },
+  imglogo: {
+    width: 106,
+    height: 106,
+    alignSelf: "center",
+    marginVertical: 40,
+  },
   panel: {
     flex: 1,
     backgroundColor: "#fff",
@@ -130,7 +143,7 @@ const styles = StyleSheet.create({
     height: 50,
     marginHorizontal: 20,
     paddingHorizontal: 20,
-    backgroundColor: "rgba(37,211,106,0.6)",
+    backgroundColor: "rgba(37, 211, 106, 0.6)",
   },
   input: {
     width: "80%",

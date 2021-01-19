@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import { StyleSheet, View, Text, Image, Alert } from "react-native";
+import { StyleSheet, Text, View, Image, Alert } from "react-native";
 import CodeInput from "react-native-code-input";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../Componentes/Loading";
@@ -36,12 +36,11 @@ export default function ConfirmarNumero(props) {
         photoURL,
         email,
         phoneNumber,
-        permisos: false,
         fechacreacion: new Date(),
       });
       setloading(false);
     } else {
-      Alert.alert("Error", "Favor de validar el código introducido ", [
+      Alert.alert("Error", "Favor válidar el código introducido", [
         {
           style: "default",
           text: "Entendido",
@@ -49,9 +48,7 @@ export default function ConfirmarNumero(props) {
       ]);
       setloading(false);
     }
-    // 1.- Obtener token movil para notificaciones push y extraer info del usuario
-    // Obtener Token del teléfono
-    // Va a hacer validaciones y confirmar autenticación
+    //1. Obtener token móvil para push notification
   };
 
   return (
@@ -61,7 +58,7 @@ export default function ConfirmarNumero(props) {
         style={styles.imglogo}
       />
       <Text style={styles.titulo}>
-        Por favor, revise sus SMS e introduzca el código de confirmación.
+        Favor revise su sms e introduzca los códigos de confirmación
       </Text>
       <CodeInput
         activeColor="#fff"
@@ -77,16 +74,17 @@ export default function ConfirmarNumero(props) {
         }}
         secureTextEntry
       />
-      <Loading isVisible={loading} text="Por favor espere..." />
+      <Loading isVisible={loading} text="Favor espere" />
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#128c7e",
+    backgroundColor: "#128C7E",
     paddingHorizontal: 20,
   },
   imglogo: {

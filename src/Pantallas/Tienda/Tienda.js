@@ -35,11 +35,11 @@ export default function Tienda() {
       setnotificaciones(0);
       setproductlist(await ListarProductos());
 
-      // const consulta = await ListarNotificaciones();
-      // if (consulta.statusresponse) {
-      //   setnotificaciones(size(consulta.data));
-      //   console.log(consulta);
-      // }
+      const consulta = await ListarNotificaciones();
+      if (consulta.statusresponse) {
+        setnotificaciones(size(consulta.data));
+        console.log(consulta);
+      }
     })();
   }, []);
 
@@ -48,10 +48,10 @@ export default function Tienda() {
       (async () => {
         setnotificaciones(0);
         setproductlist(await ListarProductos());
-        // const consulta = await ListarNotificaciones();
-        // if (consulta.statusresponse) {
-        //   setnotificaciones(size(consulta.data));
-        // }
+        const consulta = await ListarNotificaciones();
+        if (consulta.statusresponse) {
+          setnotificaciones(size(consulta.data));
+        }
       })();
     }, [])
   );
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   header: {
-    height: "20%",
+    height: "22%",
     width: "100%",
     backgroundColor: "#128c7e",
   },
