@@ -33,6 +33,8 @@ export default function Tienda() {
   useEffect(() => {
     (async () => {
       setproductList(await ListarProductos());
+      console.log("**************Productos***************");
+      console.log(productList);
     })();
   }, []);
 
@@ -103,6 +105,8 @@ function Producto(props) {
     usuario,
   } = producto.item;
 
+  const { displayName, photoURL } = usuario;
+
   console.log(producto);
   return (
     <TouchableOpacity
@@ -118,12 +122,16 @@ function Producto(props) {
         <Text style={styles.vendidopor}>Vendido por:</Text>
         <View style={styles.avatarbots}>
           <Avatar
-            source={require("../../../assets/avatar.jpg")}
+            source={
+              photoURL
+                ? { uri: photoURL }
+                : require("../../../assets/avatar.jpg")
+            }
             rounded
             size="large"
             style={styles.avatar}
           />
-          <Text style={styles.displayname}> Nombre </Text>
+          <Text style={styles.displayname}> {displayName} </Text>
         </View>
         <Rating
           imageSize={15}
