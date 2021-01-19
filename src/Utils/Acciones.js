@@ -279,7 +279,7 @@ export const obtenerRegistroxID = async (coleccion, documento) => {
 };
 
 export const ListarProductos = async () => {
-  const productList = [];
+  const productoslist = [];
   let index = 0;
 
   await db
@@ -290,18 +290,43 @@ export const ListarProductos = async () => {
       response.forEach((doc) => {
         const producto = doc.data();
         producto.id = doc.id;
-        productList.push(producto);
+        productoslist.push(producto);
       });
     })
     .catch((err) => console.log(err));
 
-  for (const registro of productList) {
+  for (const registro of productoslist) {
     const usuario = await obtenerRegistroxID("Usuarios", registro.usuario);
-    // console.log("****************Usuario*****************");
-    // console.log(usuario);
-    productList[index].usuario = usuario.data;
+    productoslist[index].usuario = usuario.data;
     index++;
   }
 
-  return productList;
+  return productoslist;
+};
+
+export const listarProductosxCategoria = async (categoria) => {
+  const productoslist = [];
+  let index = 0;
+
+  await db
+    .collection("Productos")
+    .where("status", "==", 1)
+    .where("categoria", "==", categoria)
+    .get()
+    .then((response) => {
+      response.forEach((doc) => {
+        const producto = doc.data();
+        producto.id = doc.id;
+        productoslist.push(producto);
+      });
+    })
+    .catch((err) => console.log(err));
+
+  for (const registro of productoslist) {
+    const usuario = await obtenerRegistroxID("Usuarios", registro.usuario);
+    productoslist[index].usuario = usuario.data;
+    index++;
+  }
+
+  return productoslist;
 };

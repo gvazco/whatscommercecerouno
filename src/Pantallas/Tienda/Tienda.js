@@ -8,35 +8,65 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import {
-  Icon,
-  Avatar,
-  Image,
-  Rating,
-  Badge,
-  SearchBar,
-} from "react-native-elements";
+import { Icon, Avatar, Image, Rating, Badge } from "react-native-elements";
 import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { size } from "lodash";
-import { ListarProductos, ObtenerUsuario } from "../../Utils/Acciones";
+import {
+  ListarProductos,
+  ObtenerUsuario,
+  listarProductosxCategoria,
+  Buscar,
+  ListarNotificaciones,
+} from "../../Utils/Acciones";
 import Busqueda from "../../Componentes/Busqueda";
 
 export default function Tienda() {
   const navigation = useNavigation();
-  const [productList, setproductList] = useState([]);
+  const [productlist, setproductlist] = useState([]);
   const [search, setsearch] = useState("");
   const [mensajes, setmensajes] = useState("Cargando...");
   const [notificaciones, setnotificaciones] = useState(0);
   const { photoURL } = ObtenerUsuario();
+  const [categoria, setcategoria] = useState("");
 
   useEffect(() => {
     (async () => {
-      setproductList(await ListarProductos());
-      console.log("**************Productos***************");
-      console.log(productList);
+      setnotificaciones(0);
+      setproductlist(await ListarProductos());
+
+      // const consulta = await ListarNotificaciones();
+      // if (consulta.statusresponse) {
+      //   setnotificaciones(size(consulta.data));
+      //   console.log(consulta);
+      // }
     })();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      (async () => {
+        setnotificaciones(0);
+        setproductlist(await ListarProductos());
+        // const consulta = await ListarNotificaciones();
+        // if (consulta.statusresponse) {
+        //   setnotificaciones(size(consulta.data));
+        // }
+      })();
+    }, [])
+  );
+
+  const cargarFiltroxCategoria = async (categoria) => {
+    const listaproductos = await listarProductosxCategoria(categoria);
+    setproductlist(listaproductos);
+    if (listaproductos.length === 0) {
+      setmensajes("No se encontraron datos para la categoría " + categoria);
+    }
+  };
+
+  const actualizarProductos = async () => {
+    setproductlist(await ListarProductos());
+  };
 
   return (
     <View style={styles.frame}>
@@ -52,6 +82,7 @@ export default function Tienda() {
                   ? { uri: photoURL }
                   : require("../../../assets/avatar.jpg")
               }
+              onPress={() => navigation.toggleDrawer()}
             />
 
             <Image
@@ -65,28 +96,94 @@ export default function Tienda() {
                 name="bell-outline"
                 color="#fff"
                 size={30}
+                onPress={() => {
+                  navigation.navigate("mensajes");
+                }}
               />
-              <Badge
-                status="error"
-                containerStyle={{ position: "absolute", top: -4, right: -4 }}
-                value={2}
-              />
+              {notificaciones > 0 && (
+                <Badge
+                  status="error"
+                  containerStyle={{ position: "absolute", top: -4, right: -4 }}
+                  value={notificaciones}
+                />
+              )}
             </View>
           </View>
-          <Busqueda />
+          <Busqueda
+            setproductlist={setproductlist}
+            actualizarProductos={actualizarProductos}
+            setsearch={setsearch}
+            search={search}
+            setmensajes={setmensajes}
+          />
         </KeyboardAwareScrollView>
       </View>
+      <View style={styles.categoriaview}>
+        <View style={styles.titulocategoria}>
+          <Text style={styles.categoriatext}> - CATEGORIAS - </Text>
+          {categoria.length > 0 && (
+            <TouchableOpacity
+              onPress={() => {
+                setcategoria("");
+                actualizarProductos();
+              }}
+            >
+              <Icon
+                type="material-community"
+                color="red"
+                name="close"
+                reverse
+                size={10}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
+        <View style={styles.categorialist}>
+          <BotonCategoria
+            categoriaboton="libros"
+            categoria={categoria}
+            icon="book-open-outline"
+            texto="Libros"
+            setcategoria={setcategoria}
+            cargarFiltroxCategoria={cargarFiltroxCategoria}
+          />
+          <BotonCategoria
+            categoriaboton="ideas"
+            categoria={categoria}
+            icon="lightbulb-on-outline"
+            texto="Ideas"
+            setcategoria={setcategoria}
+            cargarFiltroxCategoria={cargarFiltroxCategoria}
+          />
+          <BotonCategoria
+            categoriaboton="articulos"
+            categoria={categoria}
+            icon="cart-arrow-down"
+            texto="Artículos"
+            setcategoria={setcategoria}
+            cargarFiltroxCategoria={cargarFiltroxCategoria}
+          />
+          <BotonCategoria
+            categoriaboton="servicios"
+            categoria={categoria}
+            icon="account-outline"
+            texto="Servicios"
+            setcategoria={setcategoria}
+            cargarFiltroxCategoria={cargarFiltroxCategoria}
+          />
+        </View>
+      </View>
 
-      {size(productList) > 0 ? (
+      {size(productlist) > 0 ? (
         <FlatList
-          data={productList}
+          data={productlist}
           renderItem={(producto) => (
             <Producto producto={producto} navigation={navigation} />
           )}
           keyExtractor={(item, index) => index.toString()}
         />
       ) : (
-        <Text>{mensajes}</Text>
+        <Text> {mensajes}</Text>
       )}
     </View>
   );
@@ -107,7 +204,6 @@ function Producto(props) {
 
   const { displayName, photoURL } = usuario;
 
-  console.log(producto);
   return (
     <TouchableOpacity
       style={styles.card}
@@ -118,9 +214,11 @@ function Producto(props) {
       <Image source={{ uri: imagenes[0] }} style={styles.imgproducto} />
       <View style={styles.infobox}>
         <Text style={styles.titulo}>{titulo}</Text>
-        <Text>{descripcion.substring(0, 50)}...</Text>
-        <Text style={styles.vendidopor}>Vendido por:</Text>
-        <View style={styles.avatarbots}>
+        <Text style={{ textAlign: "center" }}>
+          {descripcion.substring(0, 50)}
+        </Text>
+        <Text style={styles.vendidopor}>Vendido por</Text>
+        <View style={styles.avatarbox}>
           <Avatar
             source={
               photoURL
@@ -131,7 +229,7 @@ function Producto(props) {
             size="large"
             style={styles.avatar}
           />
-          <Text style={styles.displayname}> {displayName} </Text>
+          <Text style={styles.displayName}> {displayName} </Text>
         </View>
         <Rating
           imageSize={15}
@@ -139,8 +237,46 @@ function Producto(props) {
           style={{ paddingLeft: 40 }}
           readonly
         />
-        <Text style={styles.precio}>{precio.toFixed(2)}</Text>
+        <Text style={styles.precio}>{precio.toFixed(2)} </Text>
       </View>
+    </TouchableOpacity>
+  );
+}
+
+function BotonCategoria(props) {
+  const {
+    categoriaboton,
+    categoria,
+    icon,
+    texto,
+    setcategoria,
+    cargarFiltroxCategoria,
+  } = props;
+  return (
+    <TouchableOpacity
+      style={
+        categoria === categoriaboton
+          ? styles.categoriahover
+          : styles.categoriabtn
+      }
+      onPress={() => {
+        setcategoria(categoriaboton);
+        cargarFiltroxCategoria(categoriaboton);
+      }}
+    >
+      <Icon
+        type="material-community"
+        name={icon}
+        size={30}
+        color={categoria === categoriaboton ? "#fff" : "#128c7e"}
+      />
+      <Text
+        style={
+          categoria === categoriaboton ? styles.cattxthover : styles.cattxt
+        }
+      >
+        {texto}
+      </Text>
     </TouchableOpacity>
   );
 }
@@ -151,7 +287,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
   },
   header: {
-    height: "22%",
+    height: "20%",
     width: "100%",
     backgroundColor: "#128c7e",
   },
@@ -161,11 +297,14 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
     alignItems: "center",
   },
-  logo: { width: 50, height: 50 },
+  logo: {
+    width: 50,
+    height: 50,
+  },
   card: {
-    flex: 1,
     width: "100%",
     paddingVertical: 20,
+    flex: 1,
     paddingHorizontal: 10,
     marginHorizontal: 5,
     borderBottomColor: "#128c7e",
@@ -174,8 +313,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     flexDirection: "row",
   },
-  imgproducto: { width: 150, height: 200, borderRadius: 10 },
-  infobox: { paddingLeft: 10, alignItems: "center", flex: 1 },
+  imgproducto: {
+    width: 150,
+    height: 200,
+    borderRadius: 10,
+  },
+  infobox: {
+    paddingLeft: 10,
+    alignItems: "center",
+    flex: 1,
+  },
   titulo: {
     marginTop: 10,
     fontSize: 18,
@@ -189,7 +336,7 @@ const styles = StyleSheet.create({
     color: "#075e54",
     fontWeight: "700",
   },
-  avatarbots: {
+  avatarbox: {
     flexDirection: "row",
     alignItems: "center",
     marginTop: 5,
@@ -198,12 +345,71 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
   },
-  displayname: {},
   precio: {
     marginTop: 10,
     fontSize: 24,
     fontWeight: "bold",
     color: "#128c7e",
     alignSelf: "center",
+  },
+  categoriahover: {
+    width: 80,
+    height: 80,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowOffset: {
+      width: 7.0,
+      height: -8.0,
+    },
+    shadowOpacity: 0.5,
+    shadowColor: "#000",
+    backgroundColor: "#25d366",
+    borderRadius: 40,
+    elevation: 1,
+  },
+
+  categoriabtn: {
+    width: 80,
+    height: 80,
+    alignItems: "center",
+    justifyContent: "center",
+    shadowOffset: {
+      width: 7.0,
+      height: -8.0,
+    },
+    shadowOpacity: 0.5,
+    shadowColor: "#000",
+    backgroundColor: "#fff",
+    borderRadius: 40,
+    elevation: 1,
+  },
+  cattxthover: {
+    fontSize: 12,
+    fontStyle: "italic",
+    color: "#fff",
+  },
+  cattxt: {
+    fontSize: 12,
+    fontStyle: "italic",
+    color: "#128C7E",
+  },
+  categoriaview: {
+    marginTop: 10,
+  },
+  titulocategoria: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  categoriatext: {
+    color: "#128c7e",
+    fontSize: 14,
+    fontWeight: "bold",
+  },
+  categorialist: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
+    paddingTop: 5,
   },
 });
