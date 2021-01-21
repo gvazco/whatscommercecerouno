@@ -24,7 +24,7 @@ import {
   subirImagenesBatch,
   actualizarRegistro,
   ObtenerUsuario,
-  obtenerRegistroxID,
+  obternerRegistroxID,
 } from "../../Utils/Acciones";
 
 export default function EditarProducto(props) {
@@ -33,24 +33,24 @@ export default function EditarProducto(props) {
   const [titulo, settitulo] = useState("");
   const [descripcion, setdescripcion] = useState("");
   const [precio, setprecio] = useState(0.0);
-  const [imagenes, setimagenes] = useState("");
+  const [imagenes, setimagenes] = useState([]);
   const [categoria, setcategoria] = useState("");
   const [rating, setrating] = useState(5);
-  const [errores, seterrores] = useState("");
+  const [errores, seterrores] = useState({});
   const [loading, setloading] = useState(false);
   const btnref = useRef();
   const navigation = useNavigation();
 
   useEffect(() => {
     (async () => {
-      const response = await obtenerRegistroxID("Productos", id);
+      const response = await obternerRegistroxID("Productos", id);
       console.log(response);
       const { data } = response;
       settitulo(data.titulo);
       setdescripcion(data.descripcion);
       setprecio(data.precio);
       setimagenes(data.imagenes);
-      setraiting(data.rating);
+      setrating(data.rating);
       setcategoria(data.categoria);
     })();
   }, []);
@@ -91,7 +91,6 @@ export default function EditarProducto(props) {
         imagenes,
         "ImagenesProductos"
       );
-
       const producto = {
         titulo,
         descripcion,
@@ -99,7 +98,7 @@ export default function EditarProducto(props) {
         usuario: ObtenerUsuario().uid,
         imagenes: urlimagenes,
         status: 1,
-        fechadecreacion: new Date(),
+        fechacreacion: new Date(),
         rating,
         categoria,
       };
@@ -110,10 +109,10 @@ export default function EditarProducto(props) {
         producto
       );
 
-      if (registrarproducto.statusresponse) {
+      if (registrarproducto.statusreponse) {
         setloading(false);
         Alert.alert(
-          "Actualización Completa",
+          "Actualización completa",
           "El producto se ha actualizado correctamente",
           [
             {
@@ -125,6 +124,7 @@ export default function EditarProducto(props) {
         );
       } else {
         setloading(false);
+
         Alert.alert(
           "Actualización Fallida",
           "Ha ocurrido un error al actualizar producto",
@@ -132,7 +132,6 @@ export default function EditarProducto(props) {
             {
               style: "cancel",
               text: "Aceptar",
-              onPress: () => navigation.navigate("mitienda"),
             },
           ]
         );
@@ -144,7 +143,7 @@ export default function EditarProducto(props) {
     <KeyboardAwareScrollView style={styles.container}>
       <View
         style={{
-          borderBottomColor: "#25d366",
+          borderBottomColor: "#25D366",
           borderBottomWidth: 2,
           width: 100,
           marginTop: 20,
@@ -187,7 +186,7 @@ export default function EditarProducto(props) {
       />
       <Text style={styles.txtlabel}>Cargar Imágenes</Text>
       <SubirImagenes imagenes={imagenes} setimagenes={setimagenes} />
-      <Text style={styles.txtlabel}>Asignar Categoría</Text>
+      <Text style={styles.txtlabel}>Asignar Categoria</Text>
       <Botonera categoria={categoria} setcategoria={setcategoria} />
       <Button
         title="Editar Producto"
@@ -195,17 +194,18 @@ export default function EditarProducto(props) {
         ref={btnref}
         onPress={editProducto}
       />
-      <Loading isVisible={loading} text="Por favor espere..." />
+      <Loading isVisible={loading} text="Favor espere" />
     </KeyboardAwareScrollView>
   );
 }
 
 function SubirImagenes(props) {
   const { imagenes, setimagenes } = props;
+
   const removerimagen = (imagen) => {
     Alert.alert(
       "Eliminar Imagen",
-      "¿Estas seguro de que quieres eliminar la imagen?",
+      "¿Estás Seguro de que quieres eliminar la imagen ?",
       [
         {
           text: "Cancelar",
@@ -223,9 +223,9 @@ function SubirImagenes(props) {
 
   return (
     <ScrollView
+      style={styles.viewimagenes}
       horizontal={true}
       showsHorizontalScrollIndicator={false}
-      style={styles.viewimagenes}
     >
       {size(imagenes) < 5 && (
         <Icon
@@ -235,6 +235,7 @@ function SubirImagenes(props) {
           containerStyle={styles.containerIcon}
           onPress={async () => {
             const resultado = await cargarImagenesxAspecto([1, 1]);
+            console.log(resultado);
             if (resultado.status) {
               setimagenes([...imagenes, resultado.imagen]);
             }
@@ -313,12 +314,11 @@ function Botonera(props) {
       >
         <Icon
           type="material-community"
-          name="book-open"
+          name="account"
           size={24}
           color={categoria === "servicios" ? "#128c7e" : "#757575"}
           reverse
         />
-
         <Text>Servicios</Text>
       </TouchableOpacity>
     </View>
@@ -342,7 +342,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     height: 50,
   },
-  textarea: { height: 150 },
+  textarea: {
+    height: 150,
+  },
   txtlabel: {
     fontSize: 20,
     fontFamily: "Roboto",
@@ -358,6 +360,7 @@ const styles = StyleSheet.create({
   },
   viewimagenes: {
     flexDirection: "row",
+    flex: 1,
     marginHorizontal: 20,
     marginTop: 30,
     marginBottom: 10,
@@ -371,11 +374,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#e3e3e3",
     padding: 10,
   },
-  miniatura: { width: 100, height: 150, marginRight: 10 },
+  miniatura: {
+    width: 100,
+    height: 150,
+    marginRight: 10,
+  },
   botonera: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-around",
   },
-  btncategoria: { justifyContent: "center", alignItems: "center" },
+  btncategoria: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
