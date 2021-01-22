@@ -55,7 +55,7 @@ export default function MiTienda() {
           >
             <Icon
               type="material-community"
-              name="cart-plus"
+              name="store"
               size={100}
               color="#25d366"
               style={{ margin: 10 }}

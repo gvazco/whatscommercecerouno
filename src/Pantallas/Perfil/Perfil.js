@@ -73,9 +73,9 @@ export default function Perfil() {
   const actualizarValor = async (input, valor) => {
     switch (input) {
       case "displayName":
-        console.log(await actualilzarPerfil({ displayName: valor }));
+        // console.log(await actualilzarPerfil({ displayName: valor }));
         addRegistroEspecifico("Usuarios", usuario.uid, { displayName: valor });
-        console.log(usuario);
+        // console.log(usuario);
 
         break;
       case "email":
@@ -103,7 +103,7 @@ export default function Perfil() {
   const ConfirmarCodigo = async (verificationid, code) => {
     setloading(true);
     const resultado = await reautenticar(verificationid, code);
-    console.log(resultado);
+    // console.log(resultado);
 
     if (resultado.statusresponse) {
       const emailresponse = await actualizaremailfirebase(email);
@@ -113,8 +113,8 @@ export default function Perfil() {
         { email: email }
       );
 
-      console.log(emailresponse);
-      console.log(updateregistro);
+      // console.log(emailresponse);
+      // console.log(updateregistro);
 
       setloading(false);
       setisVisible(false);
@@ -161,7 +161,7 @@ export default function Perfil() {
 
 function CabeceraBG(props) {
   const { nombre } = props;
-  console.log(nombre);
+  // console.log(nombre);
   return (
     <View>
       <View style={styles.bg}>

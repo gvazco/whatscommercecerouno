@@ -35,8 +35,8 @@ export default function Detalle(props) {
   const [isVisible, setisvisible] = useState(false);
   const usuarioactual = ObtenerUsuario();
 
-  console.log(id);
-  console.log(titulo);
+  // console.log(id);
+  // console.log(titulo);
 
   useEffect(() => {
     (async () => {

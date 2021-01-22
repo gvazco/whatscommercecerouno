@@ -44,7 +44,7 @@ export default function EditarProducto(props) {
   useEffect(() => {
     (async () => {
       const response = await obternerRegistroxID("Productos", id);
-      console.log(response);
+      // console.log(response);
       const { data } = response;
       settitulo(data.titulo);
       setdescripcion(data.descripcion);
@@ -235,7 +235,7 @@ function SubirImagenes(props) {
           containerStyle={styles.containerIcon}
           onPress={async () => {
             const resultado = await cargarImagenesxAspecto([1, 1]);
-            console.log(resultado);
+            // console.log(resultado);
             if (resultado.status) {
               setimagenes([...imagenes, resultado.imagen]);
             }

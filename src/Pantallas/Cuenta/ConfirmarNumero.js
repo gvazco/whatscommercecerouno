@@ -13,13 +13,14 @@ import {
 export default function ConfirmarNumero(props) {
   const { route } = props;
   const { verificationid } = route.params;
+  // console.log(verificationid);
 
   const [loading, setloading] = useState(false);
 
   const confirmarCodigoSMS = async (code) => {
     setloading(true);
     const resultado = await confirmarcodigo(verificationid, code);
-    console.log(resultado);
+    // console.log(resultado);
     if (resultado) {
       const token = await obtenerToken();
       const {
@@ -36,6 +37,7 @@ export default function ConfirmarNumero(props) {
         photoURL,
         email,
         phoneNumber,
+        roll: 1,
         fechacreacion: new Date(),
       });
       setloading(false);

@@ -11,8 +11,8 @@ import {
 } from "../../Utils/Acciones";
 
 export default function EnviarConfirmacion() {
-  const [country, setcountry] = useState("PA");
-  const [callingCode, setcallingcode] = useState("507");
+  const [country, setcountry] = useState("MX");
+  const [callingCode, setcallingcode] = useState("52");
   const [phone, setphone] = useState("");
   const recaptchaVerifier = useRef();
   const inputphone = useRef();

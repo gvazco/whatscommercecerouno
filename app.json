@@ -27,7 +27,8 @@
         "WRITE_EXTERNAL_STORAGE",
         "NOTIFICACION",
         "USER_FACING_NOTIFICATIONS"
-      ]
+      ],
+      "useNextNotificationsApi": true
     },
     "web": {
       "favicon": "./assets/favicon.png"

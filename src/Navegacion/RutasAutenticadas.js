@@ -1,18 +1,20 @@
 import React from "react";
-// import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { Icon } from "react-native-elements";
 import ShopButton from "../Componentes/ShopButton";
+import CustomDrawerContent from "../Componentes/CustomDrawerContent";
 
 import TiendaStack from "./TiendaStack";
 import PerfilStack from "./PerfilStack";
 import MiTienda from "./MiTiendaStack";
-
 import { ObtenerUsuario } from "../Utils/Acciones";
 
-//aquí importaremos algunos componentes más adelante
+var user = ObtenerUsuario();
+console.log(user);
+
+//aquí importaremos algunos componentes más tarde.
 
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -28,7 +30,7 @@ const TabBar = () => {
           borderTopLeftRadius: 60,
           borderTopRightRadius: 60,
           alignItems: "center",
-          backgroundColor: "#128c7e",
+          backgroundColor: "#128C7E",
           paddingBottom: 5,
         },
       }}
@@ -39,7 +41,7 @@ const TabBar = () => {
       <Tab.Screen
         component={TiendaStack}
         name="tienda"
-        options={{ title: "Tienda" }}
+        optiones={{ title: "Tienda" }}
       />
 
       <Tab.Screen
@@ -47,6 +49,7 @@ const TabBar = () => {
         name="mitienda"
         options={{ title: "", tabBarIcon: () => <ShopButton /> }}
       />
+
       <Tab.Screen
         component={PerfilStack}
         name="cuenta"
@@ -81,7 +84,20 @@ function mostrarIcono(route, color) {
 export default function RutasAutenticadas() {
   return (
     <NavigationContainer>
-      <TabBar />
+      <Drawer.Navigator
+        drawerContent={(props) => <CustomDrawerContent {...props} />}
+      >
+        <Drawer.Screen
+          name="Tienda"
+          component={TabBar}
+          options={{
+            title: "Tienda",
+            drawerIcon: () => {
+              <Icon type="material-community" name="store" size={24} />;
+            },
+          }}
+        />
+      </Drawer.Navigator>
     </NavigationContainer>
   );
 }

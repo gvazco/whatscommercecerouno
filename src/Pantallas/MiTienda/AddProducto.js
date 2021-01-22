@@ -211,7 +211,7 @@ function SubirImagenes(props) {
           containerStyle={styles.containerIcon}
           onPress={async () => {
             const resultado = await cargarImagenesxAspecto([1, 1]);
-            console.log(resultado);
+            // console.log(resultado);
             if (resultado.status) {
               setimagenes([...imagenes, resultado.imagen]);
             }
