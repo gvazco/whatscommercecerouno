@@ -31,7 +31,7 @@ export default function LoginForm(props) {
         .then((response) => {
           setloading(false);
           toastRef.current.show("Ha iniciado sesión exitosamente");
-          console.log(firebase.auth().currentUser);
+          // console.log(firebase.auth().currentUser);
         })
         .catch((err) => {
           setloading(false);
@@ -107,7 +107,7 @@ export default function LoginForm(props) {
       </Text>
       <Divider
         style={{
-          backgroundColor: "#128C7E",
+          backgroundColor: "#128c7e",
           height: 1,
           width: "90%",
           marginTop: 20,

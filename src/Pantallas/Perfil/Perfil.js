@@ -73,7 +73,7 @@ export default function Perfil() {
   const actualizarValor = async (input, valor) => {
     switch (input) {
       case "displayName":
-        // console.log(await actualilzarPerfil({ displayName: valor }));
+        console.log(await actualilzarPerfil({ displayName: valor }));
         addRegistroEspecifico("Usuarios", usuario.uid, { displayName: valor });
         // console.log(usuario);
 
@@ -207,8 +207,8 @@ function HeaderAvatar(props) {
         style={styles.avatar}
         size="large"
         rounded
-        // showAccessory={true}
-        onPress={cambiarfoto}
+        showAccessory={true}
+        onAccessoryPress={cambiarfoto}
       />
     </View>
   );
@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
     height: 200,
     borderBottomLeftRadius: 200,
     borderBottomRightRadius: 200,
-    backgroundColor: "#128C7E",
+    backgroundColor: "#128c7e",
     justifyContent: "center",
     alignItems: "center",
   },

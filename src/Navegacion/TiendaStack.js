@@ -22,7 +22,7 @@ export default function TiendaStack() {
         name="detalle"
         options={{
           headerTransparent: true,
-          headerTintColor: "#128C7E",
+          headerTintColor: "#128c7e",
           title: "",
         }}
       />
@@ -31,7 +31,7 @@ export default function TiendaStack() {
         name="mensajes-lista"
         options={{
           title: "Mensajes",
-          headerStyle: { backgroundColor: "#128C7E" },
+          headerStyle: { backgroundColor: "#128c7e" },
           headerTintColor: "#fff",
         }}
       />
@@ -40,7 +40,7 @@ export default function TiendaStack() {
         name="contacto"
         options={{
           title: "Contacto",
-          headerStyle: { backgroundColor: "#128C7E" },
+          headerStyle: { backgroundColor: "#128c7e" },
           headerTintColor: "#fff",
         }}
       />

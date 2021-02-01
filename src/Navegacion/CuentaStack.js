@@ -15,7 +15,7 @@ export default function CuentaStack() {
           component={EnviarConfirmacion}
           name="enviar-confirmacion"
           options={{
-            title: "Confirma tu Número de Teléfono",
+            title: "Confirma Tu Número De Teléfono",
             headerStyle: { backgroundColor: "#128c7e" },
             headerTintColor: "#fff",
           }}
@@ -24,7 +24,7 @@ export default function CuentaStack() {
           component={ConfirmarNumero}
           name="confirmar-movil"
           options={{
-            title: "Confirma tu Número",
+            title: "Confirmar Número",
             headerStyle: { backgroundColor: "#128c7e" },
             headerTintColor: "#fff",
           }}

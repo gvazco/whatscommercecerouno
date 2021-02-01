@@ -30,7 +30,7 @@ export default function MiTienda() {
 
   return (
     <View style={{ flex: 1, justifyContent: "center" }}>
-      {productos ? (
+      {productos.length > 0 ? (
         <FlatList
           data={productos}
           renderItem={(item) => (
@@ -55,7 +55,7 @@ export default function MiTienda() {
           >
             <Icon
               type="material-community"
-              name="store"
+              name="cart-plus"
               size={100}
               color="#25d366"
               style={{ margin: 10 }}
@@ -133,7 +133,7 @@ function Producto(props) {
               color="#FFA000"
               style={styles.iconedit}
               onPress={() => {
-                navigation.navigate("editar-producto", { id });
+                navigation.navigate("edit-producto", { id });
               }}
             />
           </View>
@@ -185,8 +185,8 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 10,
     borderBottomColor: 0.5,
-    borderBottomColor: "#128C7E",
-    shadowColor: "#128C7E",
+    borderBottomColor: "#128c7e",
+    shadowColor: "#128c7e",
     shadowOffset: { height: 10 },
     shadowOpacity: 0.9,
   },

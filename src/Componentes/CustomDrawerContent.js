@@ -21,7 +21,7 @@ export default function CustomDrawerContent(props) {
                     ? { uri: photoURL }
                     : require("../../assets/avatar.jpg")
                 }
-                onPress={() => navigation.toggleDrawer()}
+                onPress={() => props.navigation.toggleDrawer()}
               />
 
               <View style={{ marginLeft: 15, flexDirection: "column" }}>
@@ -61,6 +61,7 @@ export default function CustomDrawerContent(props) {
                 props.navigation.navigate("mitienda");
               }}
             />
+
             <DrawerItem
               icon={({ color, size }) => (
                 <Icon

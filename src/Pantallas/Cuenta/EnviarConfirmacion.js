@@ -109,7 +109,7 @@ export default function EnviarConfirmacion() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#128C7E",
+    backgroundColor: "#128c7e",
   },
   imglogo: {
     width: 106,

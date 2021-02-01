@@ -122,7 +122,7 @@ export default function RegisterForm(props) {
       <Button
         title="INICIAR SESIÓN"
         containerStyle={styles.btnentrar}
-        buttonStyle={{ backgroundColor: "#128C7E" }}
+        buttonStyle={{ backgroundColor: "#128c7e" }}
         onPress={() => navigation.goBack()}
       />
       <Loading isVisible={loading} text="Favor Espere" />

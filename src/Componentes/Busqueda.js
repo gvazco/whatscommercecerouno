@@ -50,5 +50,3 @@ export default function Busqueda(props) {
     />
   );
 }
-
-const styles = StyleSheet.create({});

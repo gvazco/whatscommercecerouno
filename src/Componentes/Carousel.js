@@ -55,7 +55,7 @@ function Paginacion(props) {
         height: 10,
         borderRadius: 5,
         marginHorizontal: 2,
-        backgroundColor: "#128C7E",
+        backgroundColor: "#128c7e",
       }}
       inactiveDotOpacity={0.6}
       inactiveDotScale={0.6}

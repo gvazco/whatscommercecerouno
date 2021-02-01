@@ -29,6 +29,7 @@ export default function ConfirmarNumero(props) {
         photoURL,
         email,
         phoneNumber,
+        roll,
       } = ObtenerUsuario();
 
       const registro = await addRegistroEspecifico("Usuarios", uid, {
@@ -37,7 +38,7 @@ export default function ConfirmarNumero(props) {
         photoURL,
         email,
         phoneNumber,
-        roll: 1,
+        roll: true,
         fechacreacion: new Date(),
       });
       setloading(false);
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#128C7E",
+    backgroundColor: "#128c7e",
     paddingHorizontal: 20,
   },
   imglogo: {

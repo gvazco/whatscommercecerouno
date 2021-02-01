@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createDrawerNavigator } from "@react-navigation/drawer";
@@ -9,10 +9,12 @@ import CustomDrawerContent from "../Componentes/CustomDrawerContent";
 import TiendaStack from "./TiendaStack";
 import PerfilStack from "./PerfilStack";
 import MiTienda from "./MiTiendaStack";
-import { ObtenerUsuario } from "../Utils/Acciones";
 
-var user = ObtenerUsuario();
-console.log(user);
+import { ObtenerUsuario } from "../Utils/Acciones";
+import * as data from "../Utils/users.json";
+
+// const usersjson = data;
+// console.log(usersjson);
 
 //aquí importaremos algunos componentes más tarde.
 
@@ -20,6 +22,20 @@ const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
 const TabBar = () => {
+  const [user, setuser] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      setuser(await ObtenerUsuario());
+    })();
+  }, []);
+
+  useCallback(() => {
+    (async () => {
+      setuser(await ObtenerUsuario());
+    })();
+  }, []);
+
   return (
     <Tab.Navigator
       initialRouteName="tienda"
@@ -27,11 +43,12 @@ const TabBar = () => {
         inactiveTintColor: "#fff",
         activeTintColor: "#fff",
         style: {
-          borderTopLeftRadius: 60,
-          borderTopRightRadius: 60,
+          borderTUpLeftRadius: 30,
+          borderTopRightRadius: 30,
           alignItems: "center",
-          backgroundColor: "#128C7E",
+          backgroundColor: "#128c7e",
           paddingBottom: 5,
+          paddingTop: 5,
         },
       }}
       screenOptions={({ route }) => ({
@@ -44,12 +61,15 @@ const TabBar = () => {
         optiones={{ title: "Tienda" }}
       />
 
-      <Tab.Screen
-        component={MiTienda}
-        name="mitienda"
-        options={{ title: "", tabBarIcon: () => <ShopButton /> }}
-      />
-
+      {user.email === "gustavovazco@gmail.com" ? (
+        <Tab.Screen
+          component={MiTienda}
+          name="mitienda"
+          options={{ title: "", tabBarIcon: () => <ShopButton /> }}
+        />
+      ) : (
+        console.log("not")
+      )}
       <Tab.Screen
         component={PerfilStack}
         name="cuenta"

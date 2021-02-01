@@ -19,6 +19,7 @@ LogBox.ignoreLogs([
   "Setting a timer",
   "Avatar.onAccessoryPress",
   "Avatar.showAccessory",
+  "Failed prop type",
 ]);
 
 export default function App() {

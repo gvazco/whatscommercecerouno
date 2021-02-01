@@ -2,9 +2,11 @@ import React from "react";
 import { StyleSheet, Text, View, TouchableHighlight } from "react-native";
 import { Icon } from "react-native-elements";
 import { useNavigation } from "@react-navigation/native";
+import { ObtenerUsuario } from "../Utils/Acciones";
 
 export default function ShopButton() {
   const navigation = useNavigation();
+  const user = ObtenerUsuario();
 
   return (
     <TouchableHighlight
@@ -13,7 +15,7 @@ export default function ShopButton() {
         navigation.navigate("mitienda");
       }}
     >
-      <Icon name="store" color="#fff" size={30} />
+      <Icon name="store" color="#fff" size={45} />
     </TouchableHighlight>
   );
 }
@@ -32,6 +34,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     borderWidth: 3,
     borderColor: "#fff",
-    padding: 20,
+    padding: 10,
   },
 });

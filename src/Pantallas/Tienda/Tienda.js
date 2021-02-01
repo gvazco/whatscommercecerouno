@@ -38,7 +38,7 @@ export default function Tienda() {
       const consulta = await ListarNotificaciones();
       if (consulta.statusresponse) {
         setnotificaciones(size(consulta.data));
-        console.log(consulta);
+        // console.log(consulta);
       }
     })();
   }, []);
@@ -97,7 +97,7 @@ export default function Tienda() {
                 color="#fff"
                 size={30}
                 onPress={() => {
-                  navigation.navigate("mensajes");
+                  navigation.navigate("mensajes-lista");
                 }}
               />
               {notificaciones > 0 && (
@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
   cattxt: {
     fontSize: 12,
     fontStyle: "italic",
-    color: "#128C7E",
+    color: "#128c7e",
   },
   categoriaview: {
     marginTop: 10,
